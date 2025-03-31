@@ -28,18 +28,21 @@
           </template>
         </el-table-column>
         <el-table-column prop="teacherName" label="申请教师" />
-        <el-table-column prop="status" label="审核状态">
+        <el-table-column prop="status" label="审核状态" width="120">
           <template v-slot="scope">
             <el-tag v-if="scope.row.status === '审核通过'" type="success">{{ scope.row.status }}</el-tag>
             <el-tag v-if="scope.row.status === '待审核'" type="warning">{{ scope.row.status }}</el-tag>
             <el-tag v-if="scope.row.status === '不通过'" type="danger">{{ scope.row.status }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="reason" label="审核原因" />
-        <el-table-column prop="time" label="审核时间" />
+        <el-table-column prop="reason" label="审核原因" show-overflow-tooltip />
+        <el-table-column prop="time" label="审核时间" show-overflow-tooltip />
         <el-table-column label="操作" width="100" fixed="right">
           <template v-slot="scope">
-            <el-button type="primary" circle :icon="Edit" @click="handleEdit(scope.row)"></el-button>
+            <el-button v-if="data.user.role === 'TEACHER' && scope.row.status === '待审核'" type="primary" circle
+              :icon="Edit" @click="handleEdit(scope.row)"></el-button>
+            <el-button v-if="data.user.role === 'ADMIN'" type="primary" circle :icon="View"
+              @click="handleCheck(scope.row)"></el-button>
             <el-button type="danger" circle :icon="Delete" @click="del(scope.row.id)"></el-button>
           </template>
         </el-table-column>
@@ -50,8 +53,8 @@
         v-model:current-page="data.pageNum" :total="data.total" />
     </div>
 
-    <el-dialog title="科研项目信息" v-model="data.formVisible" width="40%" destroy-on-close>
-      <el-form ref="form" :model="data.form" label-width="70px" style="padding: 20px">
+    <el-dialog title="科研项目提交" v-model="data.formVisible" width="40%" destroy-on-close>
+      <el-form ref="formRef" :rules="rules" :model="data.form" label-width="80px" style="padding: 20px">
         <el-form-item prop="file" label="申请材料">
           <el-upload :action="baseUrl + '/files/upload'" :on-success="handleFileUpload">
             <el-button type="primary">点击上传</el-button>
@@ -92,20 +95,41 @@
         </span>
       </template>
     </el-dialog>
+    <el-dialog title="科研项目审核" v-model="data.checkVisible" width="40%" destroy-on-close>
+      <el-form :model="data.form" label-width="70px" style="padding: 20px">
+        <el-form-item prop="status" label="提交状态">
+          <el-select v-model="data.form.status" placeholder="请选择审核结果">
+            <el-option label="审核通过" value="审核通过"></el-option>
+            <el-option label="待审核" value="待审核"></el-option>
+            <el-option label="不通过" value="不通过"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item prop="reason" label="审核理由">
+          <el-input v-model="data.form.reason" placeholder="请输入审核理由"></el-input>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="data.checkVisible = false">取 消</el-button>
+          <el-button type="primary" @click="submit">提 交</el-button>
+        </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
 <script setup>
 
-import { reactive } from "vue";
+import { reactive, ref } from "vue";
 import request from "@/utils/request.js";
 import { ElMessage, ElMessageBox } from "element-plus";
-import { Delete, Edit } from "@element-plus/icons-vue";
+import { Delete, Edit, View } from "@element-plus/icons-vue";
 const baseUrl = import.meta.env.VITE_BASE_URL
-
+const formRef = ref()
 const data = reactive({
   user: JSON.parse(localStorage.getItem('xm-user') || '{}'),
   formVisible: false,
+  checkVisible: false,
   form: {},
   tableData: [],
   pageNum: 1,
@@ -115,27 +139,42 @@ const data = reactive({
   name: null,
 })
 
-const load = () => {
-  const params = {
-    pageNum: data.pageNum,
-    pageSize: data.pageSize,
-    code: data.code,
-    name: data.name
-  };
-  console.log('load 方法请求参数:', params);
-  request.get('/project/selectPage', { params }).then(res => {
-    console.log('load 方法后端返回的数据:', res);
-    if (res.code === '200') {
-      data.tableData = res.data?.list || [];
-      data.total = res.data?.total;
-      console.log('更新后的表格数据:', data.tableData);
-    }
-  }).catch(error => {
-    console.error('加载数据请求出错:', error);
-    ElMessage.error('加载数据请求出错，请稍后重试');
-  });
-};
+const rules = reactive({
+  source: [
+    { required: true, message: '请输入项目来源', trigger: 'blur' },
+  ],
+  name: [
+    { required: true, message: '请输入项目名称', trigger: 'blur' },
+  ],
+  level: [
+    { required: true, message: '请选择项目等级', trigger: 'blur' },
+  ],
+  subject: [
+    { required: true, message: '请输入申请学科', trigger: 'blur' },
+  ],
+  start: [
+    { required: true, message: '请选择开始日期', trigger: 'blur' },
+  ],
+  end: [
+    { required: true, message: '请选择结束日期', trigger: 'blur' },
+  ],
+})
 
+const load = () => {
+  request.get('/project/selectPage', {
+    params: {
+      pageNum: data.pageNum,
+      pageSize: data.pageSize,
+      code: data.code,
+      name: data.name
+    }
+  }).then(res => {
+    if (res.code === '200') {
+      data.tableData = res.data?.list || []
+      data.total = res.data?.total
+    }
+  })
+}
 const handleAdd = () => {
   data.form = {}
   data.formVisible = true
@@ -144,22 +183,21 @@ const handleEdit = (row) => {
   data.form = JSON.parse(JSON.stringify(row))
   data.formVisible = true
 }
+const handleCheck = (row) => {
+  data.form = JSON.parse(JSON.stringify(row))
+  data.checkVisible = true
+}
 const add = () => {
   request.post('/project/add', data.form).then(res => {
     if (res.code === '200') {
-      ElMessage.success('操作成功');
-      data.formVisible = false;
-      console.log('准备调用 load 方法');
-      load();
-      console.log('load 方法调用完成');
+      ElMessage.success('操作成功')
+      data.formVisible = false
+      load()
     } else {
-      ElMessage.error(res.msg);
+      ElMessage.error(res.msg)
     }
-  }).catch(error => {
-    console.error('新增请求出错:', error);
-    ElMessage.error('新增请求出错，请稍后重试');
-  });
-};
+  })
+}
 
 const update = () => {
   request.put('/project/update', data.form).then(res => {
@@ -172,8 +210,23 @@ const update = () => {
 }
 
 const save = () => {
-  console.log(data.form)
-  data.form.id ? update() : add()
+  formRef.value.validate(valid => {
+    if (valid) {
+      data.form.id ? update() : add()
+    }
+  })
+}
+
+const submit = () => {
+  request.put('/project/check', data.form).then(res => {
+    if (res.code === '200') {
+      ElMessage.success('操作成功')
+      data.checkVisible = false
+      load()
+    } else {
+      ElMessage.error(res.msg)
+    }
+  })
 }
 
 const del = (id) => {

@@ -1,0 +1,62 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.ProcessMapper">
+
+    <select id="selectAll" resultType="com.example.entity.Process">
+        select process.*, project.code as projectCode, project.name as projectName, teacher.name as teacherName from `process`
+        left join project on process.project_id = project.id
+        left join teacher on process.teacher_id = teacher.id
+        <where>
+            <if test="projectName != null"> and project.name like concat('%', #{projectName}, '%')</if>
+            <if test="teacherId != null"> and process.teacher_id = #{teacherId}</if>
+        </where>
+    </select>
+
+    <delete id="deleteById">
+        delete from `process`
+        where id = #{id}
+    </delete>
+
+    <insert id="insert" parameterType="com.example.entity.Process" useGeneratedKeys="true">
+        insert into `process`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="projectId != null">project_id,</if>
+            <if test="teacherId != null">teacher_id,</if>
+            <if test="question != null">question,</if>
+            <if test="solution != null">solution,</if>
+            <if test="content != null">content,</if>
+            <if test="time != null">time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="projectId != null">#{projectId},</if>
+            <if test="teacherId != null">#{teacherId},</if>
+            <if test="question != null">#{question},</if>
+            <if test="solution != null">#{solution},</if>
+            <if test="content != null">#{content},</if>
+            <if test="time != null">#{time},</if>
+        </trim>
+    </insert>
+
+    <update id="updateById" parameterType="com.example.entity.Process">
+        update `process`
+        <set>
+            <if test="projectId != null">
+                project_id = #{projectId},
+            </if>
+            <if test="question != null">
+                question = #{question},
+            </if>
+            <if test="solution != null">
+                solution = #{solution},
+            </if>
+            <if test="time != null">
+                time = #{time},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+</mapper>
