@@ -10,6 +10,7 @@
         <where>
             <if test="projectName != null"> and project.name like concat('%', #{projectName}, '%')</if>
             <if test="teacherId != null"> and process.teacher_id = #{teacherId}</if>
+            <if test="projectId != null"> and process.project_id = #{projectId}</if>
         </where>
     </select>
 

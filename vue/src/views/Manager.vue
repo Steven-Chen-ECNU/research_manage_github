@@ -47,6 +47,14 @@
             </template>
             <el-menu-item index="/manager/project">科研项目管理</el-menu-item>
             <el-menu-item index="/manager/process">科研过程管理</el-menu-item>
+            <el-menu-item index="/manager/type" v-if="data.user.role === 'ADMIN'">成果类型管理</el-menu-item>
+            <el-menu-item index="/manager/achievement">科研成果管理</el-menu-item>
+            <el-menu-item index="/manager/teacherFeedback" v-if="data.user.role === 'TEACHER'">教师反馈</el-menu-item>
+            <el-menu-item index="/manager/feedback" v-if="data.user.role === 'ADMIN'">教师反馈回复</el-menu-item>
+            <el-menu-item index="/manager/activity" v-if="data.user.role === 'ADMIN'">学术活动管理</el-menu-item>
+            <el-menu-item index="/manager/teacherActivity" v-if="data.user.role === 'TEACHER'">学术活动报名</el-menu-item>
+            <el-menu-item index="/manager/apply" v-if="data.user.role === 'TEACHER'">我的活动申请</el-menu-item>
+            <el-menu-item index="/manager/apply" v-if="data.user.role === 'ADMIN'">活动申请审核</el-menu-item>
             <el-menu-item index="/manager/notice" v-if="data.user.role === 'ADMIN'">系统公告</el-menu-item>
           </el-sub-menu>
           <el-sub-menu index="2" v-if="data.user.role === 'ADMIN'">

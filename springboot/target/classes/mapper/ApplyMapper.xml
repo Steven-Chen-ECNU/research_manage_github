@@ -1,0 +1,65 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.ApplyMapper">
+
+    <select id="selectAll" resultType="com.example.entity.Apply">
+        select apply.*, teacher.name as teacherName, activity.name as activityName from `apply`
+        left join teacher on apply.teacher_id = teacher.id
+        left join activity on apply.activity_id = activity.id
+        <where>
+            <if test="teacherName != null"> and teacher.name like concat('%', #{teacherName}, '%')</if>
+            <if test="activityName != null"> and activity.name like concat('%', #{activityName}, '%')</if>
+            <if test="teacherId != null"> and apply.teacher_id = #{teacherId}</if>
+        </where>
+    </select>
+
+    <delete id="deleteById">
+        delete from `apply`
+        where id = #{id}
+    </delete>
+
+    <insert id="insert" parameterType="com.example.entity.Apply" useGeneratedKeys="true">
+        insert into `apply`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="activityId != null">activity_id,</if>
+            <if test="teacherId != null">teacher_id,</if>
+            <if test="description != null">description,</if>
+            <if test="status != null">status,</if>
+            <if test="reason != null">reason,</if>
+            <if test="time != null">time,</if>
+            <if test="checkTime != null">check_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="activityId != null">#{activityId},</if>
+            <if test="teacherId != null">#{teacherId},</if>
+            <if test="description != null">#{description},</if>
+            <if test="status != null">#{status},</if>
+            <if test="reason != null">#{reason},</if>
+            <if test="time != null">#{time},</if>
+            <if test="checkTime != null">#{checkTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateById" parameterType="com.example.entity.Apply">
+        update `apply`
+        <set>
+            <if test="description != null">
+                description = #{description},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="reason != null">
+                reason = #{reason},
+            </if>
+            <if test="checkTime != null">
+                check_time = #{checkTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+</mapper>

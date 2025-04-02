@@ -1,0 +1,71 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.ActivityMapper">
+
+    <select id="selectAll" resultType="com.example.entity.Activity">
+        select * from `activity`
+        <where>
+            <if test="type != null"> and type like concat('%', #{type}, '%')</if>
+            <if test="name != null"> and name like concat('%', #{name}, '%')</if>
+        </where>
+    </select>
+
+    <delete id="deleteById">
+        delete from `activity`
+        where id = #{id}
+    </delete>
+
+    <insert id="insert" parameterType="com.example.entity.Activity" useGeneratedKeys="true">
+        insert into `activity`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="type != null">type,</if>
+            <if test="name != null">name,</if>
+            <if test="content != null">content,</if>
+            <if test="img != null">img,</if>
+            <if test="location != null">location,</if>
+            <if test="start != null">start,</if>
+            <if test="end != null">end,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="type != null">#{type},</if>
+            <if test="name != null">#{name},</if>
+            <if test="content != null">#{content},</if>
+            <if test="img != null">#{img},</if>
+            <if test="location != null">#{location},</if>
+            <if test="start != null">#{start},</if>
+            <if test="end != null">#{end},</if>
+        </trim>
+    </insert>
+
+    <update id="updateById" parameterType="com.example.entity.Activity">
+        update `activity`
+        <set>
+            <if test="type != null">
+                type = #{type},
+            </if>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="content != null">
+                content = #{content},
+            </if>
+            <if test="img != null">
+                img = #{img},
+            </if>
+            <if test="location != null">
+                location = #{location},
+            </if>
+            <if test="start != null">
+                start = #{start},
+            </if>
+            <if test="end != null">
+                end = #{end},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+</mapper>

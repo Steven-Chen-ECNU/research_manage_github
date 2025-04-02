@@ -1,0 +1,57 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.FeedbackMapper">
+
+    <select id="selectAll" resultType="com.example.entity.Feedback">
+        select feedback.*, teacher.name as teacherName, teacher.avatar as teacherAvatar from `feedback`
+        left join teacher on feedback.teacher_id = teacher.id
+        <where>
+            <if test="teacherName != null"> and teacher.name like concat('%', #{teacherName}, '%')</if>
+        </where>
+    </select>
+
+    <delete id="deleteById">
+        delete from `feedback`
+        where id = #{id}
+    </delete>
+
+    <insert id="insert" parameterType="com.example.entity.Feedback" useGeneratedKeys="true">
+        insert into `feedback`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="teacherId != null">teacher_id,</if>
+            <if test="content != null">content,</if>
+            <if test="time != null">time,</if>
+            <if test="replyContent != null">reply_content,</if>
+            <if test="replyName != null">reply_name,</if>
+            <if test="replyTime != null">reply_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="teacherId != null">#{teacherId},</if>
+            <if test="content != null">#{content},</if>
+            <if test="time != null">#{time},</if>
+            <if test="replyContent != null">#{replyContent},</if>
+            <if test="replyName != null">#{replyName},</if>
+            <if test="replyTime != null">#{replyTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateById" parameterType="com.example.entity.Feedback">
+        update `feedback`
+        <set>
+            <if test="replyContent != null">
+                reply_content = #{replyContent},
+            </if>
+            <if test="replyName != null">
+                reply_name = #{replyName},
+            </if>
+            <if test="replyTime != null">
+                reply_time = #{replyTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+</mapper>

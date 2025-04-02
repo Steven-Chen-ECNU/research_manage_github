@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="card" style="margin-bottom: 5px">
-      <el-input v-model="data.title" prefix-icon="Search" style="width: 240px; margin-right: 10px"
-        placeholder="请输入公告标题查询"></el-input>
+      <el-input v-model="data.name" prefix-icon="Search" style="width: 240px; margin-right: 10px"
+        placeholder="请输入类型名称查询"></el-input>
       <el-button type="info" plain @click="load">查询</el-button>
       <el-button type="warning" plain style="margin: 0 10px" @click="reset">重置</el-button>
     </div>
@@ -14,9 +14,8 @@
     <div class="card" style="margin-bottom: 5px">
       <el-table stripe :data="data.tableData" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" />
-        <el-table-column prop="title" label="公告标题" />
-        <el-table-column prop="content" label="公告内容" />
-        <el-table-column prop="time" label="发布时间" />
+        <el-table-column prop="name" label="类型名称" />
+        <el-table-column prop="description" label="类型描述" />
         <el-table-column label="操作" width="100" fixed="right">
           <template v-slot="scope">
             <el-button type="primary" circle :icon="Edit" @click="handleEdit(scope.row)"></el-button>
@@ -30,13 +29,13 @@
         v-model:current-page="data.pageNum" :total="data.total" />
     </div>
 
-    <el-dialog title="公告信息" v-model="data.formVisible" width="40%" destroy-on-close>
+    <el-dialog title="成果类型" v-model="data.formVisible" width="40%" destroy-on-close>
       <el-form ref="form" :model="data.form" label-width="70px" style="padding: 20px">
-        <el-form-item prop="title" label="公告标题">
-          <el-input v-model="data.form.title" placeholder="请输入公告标题"></el-input>
+        <el-form-item prop="name" label="类型名称">
+          <el-input v-model="data.form.name" placeholder="请输入类型名称"></el-input>
         </el-form-item>
-        <el-form-item prop="content" label="公告内容">
-          <el-input type="textarea" :rows="4" v-model="data.form.content" placeholder="请输入公告内容"></el-input>
+        <el-form-item prop="description" label="类型描述">
+          <el-input type="textarea" :rows="4" v-model="data.form.description" placeholder="请输入类型描述"></el-input>
         </el-form-item>
       </el-form>
       <template #footer>
@@ -62,18 +61,18 @@ const data = reactive({
   form: {},
   tableData: [],
   pageNum: 1,
-  pageSize: 5,
+  pageSize: 10,
   total: 0,
-  title: null,
+  name: null,
   ids: []
 })
 
 const load = () => {
-  request.get('/notice/selectPage', {
+  request.get('/type/selectPage', {
     params: {
       pageNum: data.pageNum,
       pageSize: data.pageSize,
-      title: data.title
+      name: data.name
     }
   }).then(res => {
     if (res.code === '200') {
@@ -91,7 +90,7 @@ const handleEdit = (row) => {
   data.formVisible = true
 }
 const add = () => {
-  request.post('/notice/add', data.form).then(res => {
+  request.post('/type/add', data.form).then(res => {
     if (res.code === '200') {
       ElMessage.success('操作成功')
       data.formVisible = false
@@ -103,7 +102,7 @@ const add = () => {
 }
 
 const update = () => {
-  request.put('/notice/update', data.form).then(res => {
+  request.put('/type/update', data.form).then(res => {
     if (res.code === '200') {
       ElMessage.success('操作成功')
       data.formVisible = false
@@ -118,7 +117,7 @@ const save = () => {
 
 const del = (id) => {
   ElMessageBox.confirm('删除后数据无法恢复，您确定删除吗？', '删除确认', { type: 'warning' }).then(res => {
-    request.delete('/notice/delete/' + id).then(res => {
+    request.delete('/type/delete/' + id).then(res => {
       if (res.code === '200') {
         ElMessage.success("删除成功")
         load()
@@ -136,7 +135,7 @@ const delBatch = () => {
     return
   }
   ElMessageBox.confirm('删除后数据无法恢复，您确定删除吗？', '删除确认', { type: 'warning' }).then(res => {
-    request.delete("/notice/delete/batch", { data: data.ids }).then(res => {
+    request.delete("/type/delete/batch", { data: data.ids }).then(res => {
       if (res.code === '200') {
         ElMessage.success('操作成功')
         load()
@@ -153,7 +152,7 @@ const handleSelectionChange = (rows) => {
 }
 
 const reset = () => {
-  data.title = null
+  data.name = null
   load()
 }
 
