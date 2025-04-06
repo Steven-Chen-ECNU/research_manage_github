@@ -140,6 +140,9 @@ const data = reactive({
 })
 
 const rules = reactive({
+  file: [
+    { required: true, message: '请上传项目文件', trigger: 'blur' },
+  ],
   source: [
     { required: true, message: '请输入项目来源', trigger: 'blur' },
   ],
