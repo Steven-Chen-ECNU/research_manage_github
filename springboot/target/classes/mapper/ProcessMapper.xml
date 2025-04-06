@@ -29,6 +29,7 @@
             <if test="solution != null">solution,</if>
             <if test="content != null">content,</if>
             <if test="time != null">time,</if>
+            <if test="phase != null">phase,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">#{id},</if>
@@ -38,6 +39,7 @@
             <if test="solution != null">#{solution},</if>
             <if test="content != null">#{content},</if>
             <if test="time != null">#{time},</if>
+            <if test="phase != null">#{phase},</if>
         </trim>
     </insert>
 
@@ -53,8 +55,14 @@
             <if test="solution != null">
                 solution = #{solution},
             </if>
+            <if test="content != null">
+                content = #{content},
+            </if>
             <if test="time != null">
                 time = #{time},
+            </if>
+            <if test="phase != null">
+                phase = #{phase},
             </if>
         </set>
         where id = #{id}

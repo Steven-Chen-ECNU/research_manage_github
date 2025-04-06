@@ -16,6 +16,7 @@
                 <el-table-column v-if="data.user.role === 'ADMIN'" type="selection" width="55" />
                 <el-table-column prop="projectName" label="项目名称" />
                 <el-table-column prop="projectCode" label="项目编号" />
+                <el-table-column prop="phase" label="项目阶段" />
                 <el-table-column prop="teacherName" label="教师姓名" />
                 <el-table-column prop="time" label="报告日期" />
                 <el-table-column prop="content" label="工作内容" show-overflow-tooltip />
@@ -40,6 +41,12 @@
                 <el-form-item prop="projectId" label="科研项目">
                     <el-select v-model="data.form.projectId" placeholder="请选择科研项目">
                         <el-option v-for="item in data.projectData" :key="item.id" :label="item.name" :value="item.id">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item prop="phase" label="项目阶段">
+                    <el-select v-model="data.form.phase" placeholder="请选择项目阶段">
+                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
                         </el-option>
                     </el-select>
                 </el-form-item>
@@ -88,10 +95,28 @@ const data = reactive({
     projectData: []
 })
 
+const options = [
+    {
+        value: '立项',
+        label: '立项',
+    },
+    {
+        value: '中期',
+        label: '中期',
+    },
+    {
+        value: '结项',
+        label: '结项',
+    },
+]
+
 const formRef = ref()
 const rules = reactive({
     projectId: [
         { required: true, message: '请选择科研项目', trigger: 'blur' },
+    ],
+    phase: [
+        { required: true, message: '请选择项目阶段', trigger: 'blur' },
     ],
     content: [
         { required: true, message: '请输入工作内容', trigger: 'blur' },

@@ -4,6 +4,9 @@
             <el-timeline-item color="greenyellow" :timestamp="item.time" placement="top"
                 v-for="item in data.processData">
                 <el-card>
+                    <div style="line-height: 25px; margin-bottom: 8px; font-weight: bold"><span
+                            style="font-size: 16px; font-weight: bold; color: #333333">项目阶段：</span>{{ item.phase }}
+                    </div>
                     <div style="color: #666666; line-height: 25px"><span
                             style="font-size: 16px; font-weight: bold; color: #333333">工作内容：</span>{{ item.content }}
                     </div>

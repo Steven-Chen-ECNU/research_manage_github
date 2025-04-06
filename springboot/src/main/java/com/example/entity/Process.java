@@ -8,6 +8,7 @@ public class Process {
     private String solution;
     private String content;
     private String time;
+    private String phase;
 
     private String projectName;
     private String projectCode;
@@ -91,5 +92,13 @@ public class Process {
 
     public void setTeacherName(String teacherName) {
         this.teacherName = teacherName;
+    }
+
+    public String getPhase() {
+        return phase;
+    }
+
+    public void setPhase(String phase) {
+        this.phase = phase;
     }
 }
