@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import com.example.common.Result;
+import com.example.common.config.AutoLog;
 import com.example.entity.Admin;
 import com.example.service.AdminService;
 import com.github.pagehelper.PageInfo;
@@ -22,6 +23,7 @@ public class AdminController {
     /**
      * 新增
      */
+    @AutoLog("新增管理员")
     @PostMapping("/add")
     public Result add(@RequestBody Admin admin) {
         adminService.add(admin);
@@ -40,6 +42,7 @@ public class AdminController {
     /**
      * 单个删除
      */
+    @AutoLog("删除管理员")
     @DeleteMapping("/delete/{id}")
     public Result delete(@PathVariable Integer id) {
         adminService.deleteById(id);
@@ -49,6 +52,7 @@ public class AdminController {
     /**
      * 批量删除
      */
+    @AutoLog("批量删除管理员")
     @DeleteMapping("/delete/batch")
     public Result delete(@RequestBody List<Integer> ids) {
         adminService.deleteBatch(ids);

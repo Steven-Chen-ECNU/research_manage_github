@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import com.example.common.Result;
+import com.example.common.config.AutoLog;
 import com.example.entity.Feedback;
 import com.example.service.FeedbackService;
 import com.github.pagehelper.PageInfo;
@@ -22,6 +23,7 @@ public class FeedbackController {
     /**
      * 新增
      */
+    @AutoLog("新增教师反馈")
     @PostMapping("/add")
     public Result add(@RequestBody Feedback feedback) {
         feedbackService.add(feedback);
@@ -40,6 +42,7 @@ public class FeedbackController {
     /**
      * 单个删除
      */
+    @AutoLog("删除教师反馈")
     @DeleteMapping("/delete/{id}")
     public Result delete(@PathVariable Integer id) {
         feedbackService.deleteById(id);
@@ -49,6 +52,7 @@ public class FeedbackController {
     /**
      * 批量删除
      */
+    @AutoLog("批量删除教师反馈")
     @DeleteMapping("/delete/batch")
     public Result delete(@RequestBody List<Integer> ids) {
         feedbackService.deleteBatch(ids);

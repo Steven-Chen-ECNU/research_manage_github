@@ -55,6 +55,7 @@
             <el-menu-item index="/manager/teacherActivity" v-if="data.user.role === 'TEACHER'">学术活动报名</el-menu-item>
             <el-menu-item index="/manager/apply" v-if="data.user.role === 'TEACHER'">我的活动申请</el-menu-item>
             <el-menu-item index="/manager/apply" v-if="data.user.role === 'ADMIN'">活动申请审核</el-menu-item>
+            <el-menu-item index="/manager/log" v-if="data.user.role === 'ADMIN'">操作日志管理</el-menu-item>
             <el-menu-item index="/manager/notice" v-if="data.user.role === 'ADMIN'">系统公告</el-menu-item>
           </el-sub-menu>
           <el-sub-menu index="2" v-if="data.user.role === 'ADMIN'">

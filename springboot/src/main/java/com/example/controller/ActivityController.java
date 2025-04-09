@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import com.example.common.Result;
+import com.example.common.config.AutoLog;
 import com.example.entity.Activity;
 import com.example.service.ActivityService;
 import com.github.pagehelper.PageInfo;
@@ -22,6 +23,7 @@ public class ActivityController {
     /**
      * 新增
      */
+    @AutoLog("新增学术活动")
     @PostMapping("/add")
     public Result add(@RequestBody Activity activity) {
         activityService.add(activity);
@@ -40,6 +42,7 @@ public class ActivityController {
     /**
      * 单个删除
      */
+    @AutoLog("删除学术活动")
     @DeleteMapping("/delete/{id}")
     public Result delete(@PathVariable Integer id) {
         activityService.deleteById(id);
@@ -49,6 +52,7 @@ public class ActivityController {
     /**
      * 批量删除
      */
+    @AutoLog("批量删除学术活动")
     @DeleteMapping("/delete/batch")
     public Result delete(@RequestBody List<Integer> ids) {
         activityService.deleteBatch(ids);

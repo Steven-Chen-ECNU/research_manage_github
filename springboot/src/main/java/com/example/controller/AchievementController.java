@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import com.example.common.Result;
+import com.example.common.config.AutoLog;
 import com.example.entity.Achievement;
 import com.example.service.AchievementService;
 import com.github.pagehelper.PageInfo;
@@ -23,6 +24,7 @@ public class AchievementController {
     /**
      * 新增
      */
+    @AutoLog("新增科研成果")
     @PostMapping("/add")
     public Result add(@RequestBody Achievement achievement) throws ParseException {
         achievementService.add(achievement);
@@ -38,6 +40,10 @@ public class AchievementController {
         return Result.success();
     }
 
+    /**
+     * 审核
+     */
+    @AutoLog("审核科研成果")
     @PutMapping("/check")
     public Result check(@RequestBody Achievement achievement) {
         achievementService.check(achievement);
@@ -47,6 +53,7 @@ public class AchievementController {
     /**
      * 单个删除
      */
+    @AutoLog("删除科研成果")
     @DeleteMapping("/delete/{id}")
     public Result delete(@PathVariable Integer id) {
         achievementService.deleteById(id);
@@ -56,6 +63,7 @@ public class AchievementController {
     /**
      * 批量删除
      */
+    @AutoLog("批量删除科研成果")
     @DeleteMapping("/delete/batch")
     public Result delete(@RequestBody List<Integer> ids) {
         achievementService.deleteBatch(ids);

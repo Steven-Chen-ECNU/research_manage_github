@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import com.example.common.Result;
+import com.example.common.config.AutoLog;
 import com.example.entity.Notice;
 import com.example.service.NoticeService;
 import com.github.pagehelper.PageInfo;
@@ -22,6 +23,7 @@ public class NoticeController {
     /**
      * 新增
      */
+    @AutoLog("新增系统公告")
     @PostMapping("/add")
     public Result add(@RequestBody Notice notice) {
         noticeService.add(notice);
@@ -40,6 +42,7 @@ public class NoticeController {
     /**
      * 单个删除
      */
+    @AutoLog("删除系统公告")
     @DeleteMapping("/delete/{id}")
     public Result delete(@PathVariable Integer id) {
         noticeService.deleteById(id);
@@ -49,6 +52,7 @@ public class NoticeController {
     /**
      * 批量删除
      */
+    @AutoLog("批量删除系统公告")
     @DeleteMapping("/delete/batch")
     public Result delete(@RequestBody List<Integer> ids) {
         noticeService.deleteBatch(ids);

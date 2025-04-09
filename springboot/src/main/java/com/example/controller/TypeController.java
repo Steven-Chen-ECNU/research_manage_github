@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import com.example.common.Result;
+import com.example.common.config.AutoLog;
 import com.example.entity.Type;
 import com.example.service.TypeService;
 import com.github.pagehelper.PageInfo;
@@ -22,6 +23,7 @@ public class TypeController {
     /**
      * 新增
      */
+    @AutoLog("新增成果类型")
     @PostMapping("/add")
     public Result add(@RequestBody Type type) {
         typeService.add(type);
@@ -40,6 +42,7 @@ public class TypeController {
     /**
      * 单个删除
      */
+    @AutoLog("删除成果类型")
     @DeleteMapping("/delete/{id}")
     public Result delete(@PathVariable Integer id) {
         typeService.deleteById(id);
@@ -49,6 +52,7 @@ public class TypeController {
     /**
      * 批量删除
      */
+    @AutoLog("批量删除成果类型")
     @DeleteMapping("/delete/batch")
     public Result delete(@RequestBody List<Integer> ids) {
         typeService.deleteBatch(ids);

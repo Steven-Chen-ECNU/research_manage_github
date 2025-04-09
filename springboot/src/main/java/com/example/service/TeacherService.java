@@ -101,11 +101,11 @@ public class TeacherService {
         teacherMapper.updateById(dbTeacher);
     }
 
-    public void register(Account account) {
+    public Account register(Account account) {
         Teacher teacher=new Teacher();
         BeanUtils.copyProperties(account,teacher);
         add(teacher);
-
+        return teacher;
     }
 
 }

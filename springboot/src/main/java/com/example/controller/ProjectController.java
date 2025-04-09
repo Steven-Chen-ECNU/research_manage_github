@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import com.example.common.Result;
+import com.example.common.config.AutoLog;
 import com.example.entity.Project;
 import com.example.service.ProjectService;
 import com.github.pagehelper.PageInfo;
@@ -23,6 +24,7 @@ public class ProjectController {
     /**
      * 新增
      */
+    @AutoLog("新增科研项目")
     @PostMapping("/add")
     public Result add(@RequestBody Project project) throws ParseException {
         projectService.add(project);
@@ -38,6 +40,7 @@ public class ProjectController {
         return Result.success();
     }
 
+    @AutoLog("审核科研项目")
     @PutMapping("/check")
     public Result check(@RequestBody Project project) {
         projectService.check(project);
@@ -47,6 +50,7 @@ public class ProjectController {
     /**
      * 单个删除
      */
+    @AutoLog("删除科研项目")
     @DeleteMapping("/delete/{id}")
     public Result delete(@PathVariable Integer id) {
         projectService.deleteById(id);
@@ -56,6 +60,7 @@ public class ProjectController {
     /**
      * 批量删除
      */
+    @AutoLog("批量删除科研项目")
     @DeleteMapping("/delete/batch")
     public Result delete(@RequestBody List<Integer> ids) {
         projectService.deleteBatch(ids);

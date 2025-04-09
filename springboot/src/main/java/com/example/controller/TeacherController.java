@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import com.example.common.Result;
+import com.example.common.config.AutoLog;
 import com.example.entity.Teacher;
 import com.example.service.TeacherService;
 import com.github.pagehelper.PageInfo;
@@ -22,6 +23,7 @@ public class TeacherController {
     /**
      * 新增
      */
+    @AutoLog("新增教师")
     @PostMapping("/add")
     public Result add(@RequestBody Teacher teacher) {
         teacherService.add(teacher);
@@ -40,6 +42,7 @@ public class TeacherController {
     /**
      * 单个删除
      */
+    @AutoLog("删除教师")
     @DeleteMapping("/delete/{id}")
     public Result delete(@PathVariable Integer id) {
         teacherService.deleteById(id);
@@ -49,6 +52,7 @@ public class TeacherController {
     /**
      * 批量删除
      */
+    @AutoLog("批量删除教师")
     @DeleteMapping("/delete/batch")
     public Result delete(@RequestBody List<Integer> ids) {
         teacherService.deleteBatch(ids);

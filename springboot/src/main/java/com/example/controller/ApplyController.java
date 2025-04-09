@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import com.example.common.Result;
+import com.example.common.config.AutoLog;
 import com.example.entity.Apply;
 import com.example.service.ApplyService;
 import com.github.pagehelper.PageInfo;
@@ -22,6 +23,7 @@ public class ApplyController {
     /**
      * 新增
      */
+    @AutoLog("新增学术活动申请")
     @PostMapping("/add")
     public Result add(@RequestBody Apply apply) {
         applyService.add(apply);
@@ -37,6 +39,7 @@ public class ApplyController {
         return Result.success();
     }
 
+    @AutoLog("审核学术活动申请")
     @PutMapping("/check")
     public Result check(@RequestBody Apply apply) {
         applyService.check(apply);
@@ -46,6 +49,7 @@ public class ApplyController {
     /**
      * 单个删除
      */
+    @AutoLog("删除学术活动申请")
     @DeleteMapping("/delete/{id}")
     public Result delete(@PathVariable Integer id) {
         applyService.deleteById(id);
@@ -55,6 +59,7 @@ public class ApplyController {
     /**
      * 批量删除
      */
+    @AutoLog("批量删除学术活动申请")
     @DeleteMapping("/delete/batch")
     public Result delete(@RequestBody List<Integer> ids) {
         applyService.deleteBatch(ids);

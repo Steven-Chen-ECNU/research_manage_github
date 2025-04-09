@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import com.example.common.Result;
+import com.example.common.config.AutoLog;
 import com.example.entity.Process;
 import com.example.service.ProcessService;
 import com.github.pagehelper.PageInfo;
@@ -22,6 +23,7 @@ public class ProcessController {
     /**
      * 新增
      */
+    @AutoLog("新增科研过程")
     @PostMapping("/add")
     public Result add(@RequestBody Process process) {
         processService.add(process);
@@ -40,6 +42,7 @@ public class ProcessController {
     /**
      * 单个删除
      */
+    @AutoLog("删除科研过程")
     @DeleteMapping("/delete/{id}")
     public Result delete(@PathVariable Integer id) {
         processService.deleteById(id);
@@ -49,6 +52,7 @@ public class ProcessController {
     /**
      * 批量删除
      */
+    @AutoLog("批量删除科研过程")
     @DeleteMapping("/delete/batch")
     public Result delete(@RequestBody List<Integer> ids) {
         processService.deleteBatch(ids);
