@@ -27,6 +27,7 @@ const router = createRouter({
         { path: 'teacherActivity', meta: { name: '学术活动' }, component: () => import('@/views/manager/TeacherActivity.vue'), },
         { path: 'apply', meta: { name: '我的申请' }, component: () => import('@/views/manager/Apply.vue'), },
         { path: 'log', meta: { name: '日志管理' }, component: () => import('@/views/manager/Log.vue'), },
+        { path: 'dashboard', meta: { name: '数据统计' }, component: () => import('@/views/manager/Dashboard.vue'), },
 
       ]
     },

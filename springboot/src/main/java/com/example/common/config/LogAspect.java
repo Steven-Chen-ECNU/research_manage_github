@@ -81,19 +81,23 @@ public class LogAspect {
     }
 
     public String getLocation() throws IOException {
-        String url = "https://api.map.baidu.com/location/ip?ip=" + getIP() + "&ak=bmvg8yeOopwOB4aHl5uvx52rgIa3VrPO";
-        String res = HttpUtil.createRequest(Method.GET, url).execute().body();
-        String json = UnicodeUtil.toString(res);
-        String originalString = JSONUtil.parseObj(json).getStr("address");
-        String[] parts = originalString.split("\\|");
         String result="";
-        if (parts.length > 1 && parts.length > 2) {
-            // 获取"安徽省"和"合肥市"并拼接
-            String province = parts[1];
-            String city = parts[2];
-            result = province + "-" + city;
-            // 输出结果
-        }
+        try {
+            String url = "https://api.map.baidu.com/location/ip?ip=" + getIP() + "&ak=bmvg8yeOopwOB4aHl5uvx52rgIa3VrPO";
+            String res = HttpUtil.createRequest(Method.GET, url).execute().body();
+            String json = UnicodeUtil.toString(res);
+            String originalString = JSONUtil.parseObj(json).getStr("address");
+            String[] parts = originalString.split("\\|");
+
+            if (parts.length > 1 && parts.length > 2) {
+                // 获取"安徽省"和"合肥市"并拼接
+                String province = parts[1];
+                String city = parts[2];
+                result = province + "-" + city;
+                // 输出结果
+            }
+        } catch (Exception e) {}
+
         return result;
     }
 

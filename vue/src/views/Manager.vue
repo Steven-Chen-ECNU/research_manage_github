@@ -38,6 +38,12 @@
             </el-icon>
             <span>系统首页</span>
           </el-menu-item>
+          <el-menu-item index="/manager/dashboard" v-if="data.user.role === 'ADMIN'">
+            <el-icon>
+              <Odometer />
+            </el-icon>
+            <span>数据统计</span>
+          </el-menu-item>
           <el-sub-menu index="1">
             <template #title>
               <el-icon>
@@ -84,6 +90,7 @@
 import { reactive } from "vue";
 import router from "@/router/index.js";
 import { ElMessage } from "element-plus";
+import { Odometer } from "@element-plus/icons-vue";
 
 const data = reactive({
   user: JSON.parse(localStorage.getItem('xm-user') || '{}')
