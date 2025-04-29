@@ -4,11 +4,13 @@
       <el-input v-model="data.name" prefix-icon="Search" style="width: 240px; margin-right: 10px"
         placeholder="请输入操作名称查询"></el-input>
       <el-button type="info" plain @click="load">查询</el-button>
-      <el-button type="warning" plain style="margin: 0 10px" @click="reset">重置</el-button>
+      <el-button type="danger" round @click="delBatch">批量删除</el-button>
+
+      <!-- <el-button type="warning" plain style="margin: 0 10px" @click="reset">重置</el-button> -->
     </div>
-    <div class="card" style="margin-bottom: 5px">
+    <!-- <div class="card" style="margin-bottom: 5px">
       <el-button type="danger" plain @click="delBatch">批量删除</el-button>
-    </div>
+    </div> -->
 
     <div class="card" style="margin-bottom: 5px">
       <el-table stripe :data="data.tableData" @selection-change="handleSelectionChange">
@@ -20,8 +22,8 @@
         <el-table-column prop="time" label="操作时间" />
         <el-table-column label="操作" width="100" fixed="right">
           <template v-slot="scope">
-            <el-button type="primary" circle :icon="Edit" @click="handleEdit(scope.row)"></el-button>
-            <el-button type="danger" circle :icon="Delete" @click="del(scope.row.id)"></el-button>
+            <el-button type="primary" circle :icon="Edit" @click="handleEdit(scope.row)" title="编辑"></el-button>
+            <el-button type="danger" circle :icon="Delete" @click="del(scope.row.id)" title="删除"></el-button>
           </template>
         </el-table-column>
       </el-table>

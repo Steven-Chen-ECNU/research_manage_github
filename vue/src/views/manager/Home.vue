@@ -10,13 +10,14 @@
           </el-timeline-item>
         </el-timeline>
       </div>
-      <div style="flex: 50%"></div>
+      <div style="flex: 50%; padding: 10px;">
+        <el-calendar />
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-
 import { reactive } from "vue";
 import request from "@/utils/request.js";
 import { ElMessage } from "element-plus";

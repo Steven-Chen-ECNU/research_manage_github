@@ -4,12 +4,14 @@
       <el-input v-model="data.name" prefix-icon="Search" style="width: 240px; margin-right: 10px"
         placeholder="请输入类型名称查询"></el-input>
       <el-button type="info" plain @click="load">查询</el-button>
-      <el-button type="warning" plain style="margin: 0 10px" @click="reset">重置</el-button>
+      <!-- <el-button type="warning" plain style="margin: 0 10px" @click="reset">重置</el-button> -->
+      <el-button type="primary" round @click="handleAdd">新增</el-button>
+      <el-button type="danger" round @click="delBatch">批量删除</el-button>
     </div>
-    <div class="card" style="margin-bottom: 5px">
+    <!-- <div class="card" style="margin-bottom: 5px">
       <el-button type="primary" plain @click="handleAdd">新增</el-button>
       <el-button type="danger" plain @click="delBatch">批量删除</el-button>
-    </div>
+    </div> -->
 
     <div class="card" style="margin-bottom: 5px">
       <el-table stripe :data="data.tableData" @selection-change="handleSelectionChange">
@@ -18,8 +20,8 @@
         <el-table-column prop="description" label="类型描述" />
         <el-table-column label="操作" width="100" fixed="right">
           <template v-slot="scope">
-            <el-button type="primary" circle :icon="Edit" @click="handleEdit(scope.row)"></el-button>
-            <el-button type="danger" circle :icon="Delete" @click="del(scope.row.id)"></el-button>
+            <el-button type="primary" circle :icon="Edit" @click="handleEdit(scope.row)" title="编辑"></el-button>
+            <el-button type="danger" circle :icon="Delete" @click="del(scope.row.id)" title="编辑"></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -134,7 +136,7 @@ const delBatch = () => {
     ElMessage.warning("请选择数据")
     return
   }
-  ElMessageBox.confirm('删除后数据无法恢复，您确定删除吗？', '删除确认', { type: 'warning' }).then(res => {
+  ElMessageBox.confirm('删除后数据无法恢复，确定删除？', '删除确认', { type: 'warning' }).then(res => {
     request.delete("/type/delete/batch", { data: data.ids }).then(res => {
       if (res.code === '200') {
         ElMessage.success('操作成功')
