@@ -44,6 +44,19 @@
             </el-icon>
             <span>数据统计</span>
           </el-menu-item>
+          <el-menu-item index="/manager/dashboardnewtest" v-if="data.user.role === 'ADMIN'">
+            <el-icon>
+              <!-- <Odometer /> -->
+              <TrendCharts />
+            </el-icon>
+            <span>数据统计新测试</span>
+          </el-menu-item>
+          <el-menu-item index="/bigscreen">
+            <el-icon>
+              <DataLine />
+            </el-icon>
+            <span>数据大屏</span>
+          </el-menu-item>
           <el-sub-menu index="1">
             <template #title>
               <el-icon>
@@ -91,6 +104,8 @@ import { reactive } from "vue";
 import router from "@/router/index.js";
 import { ElMessage } from "element-plus";
 import { Odometer } from "@element-plus/icons-vue";
+import { TrendCharts } from '@element-plus/icons-vue';
+import { DataLine } from '@element-plus/icons-vue';
 
 const data = reactive({
   user: JSON.parse(localStorage.getItem('xm-user') || '{}')

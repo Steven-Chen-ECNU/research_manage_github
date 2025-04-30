@@ -6,7 +6,7 @@
                     <img :src="item.img" alt="" style="width: 100%; height: 150px; border-radius: 5px">
                     <div style="margin-top: 5px">活动类型：<span style="color: #666666">{{ item.type }}</span></div>
                     <div class="overflow" style="margin-top: 5px">活动名称：<span style="color: #666666">{{ item.name
-                            }}</span></div>
+                    }}</span></div>
                     <div class="overflows" style="margin-top: 5px">活动详情：
                         <el-popover placement="top-start" :width="250" trigger="hover" :content="item.content">
                             <template #reference>
@@ -16,7 +16,7 @@
                     </div>
                     <div style="margin-top: 5px">活动地点：<span style="color: #666666">{{ item.location }}</span></div>
                     <div style="margin-top: 5px">活动日期：<span style="color: #666666">{{ item.start }} ~ {{ item.end
-                            }}</span></div>
+                    }}</span></div>
                     <div style="margin-top: 5px">活动状态：
                         <el-tag v-if="item.status === '进行中'" type="success">{{ item.status }}</el-tag>
                         <el-tag v-if="item.status === '未开始'" type="warning">{{ item.status }}</el-tag>

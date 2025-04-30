@@ -19,16 +19,14 @@ const router = createRouter({
         { path: 'type', meta: { name: '成果分类' }, component: () => import('@/views/manager/Type.vue'), },
         { path: 'achievement', meta: { name: '科研成果' }, component: () => import('@/views/manager/Achievement.vue'), },
         { path: 'processLine', meta: { name: '科研过程线' }, component: () => import('@/views/manager/ProcessLine.vue'), },
-        // 教师反馈——教师端
         { path: 'teacherFeedback', meta: { name: '教师反馈' }, component: () => import('@/views/manager/TeacherFeedback.vue'), },
-        // 教师反馈——管理员端
         { path: 'feedback', meta: { name: '教师反馈' }, component: () => import('@/views/manager/Feedback.vue'), },
         { path: 'activity', meta: { name: '学术活动' }, component: () => import('@/views/manager/Activity.vue'), },
         { path: 'teacherActivity', meta: { name: '学术活动' }, component: () => import('@/views/manager/TeacherActivity.vue'), },
         { path: 'apply', meta: { name: '我的申请' }, component: () => import('@/views/manager/Apply.vue'), },
         { path: 'log', meta: { name: '日志管理' }, component: () => import('@/views/manager/Log.vue'), },
         { path: 'dashboard', meta: { name: '数据统计' }, component: () => import('@/views/manager/Dashboard.vue'), },
-
+        { path: 'dashboardnewtest', meta: { name: '数据统计新测试' }, component: () => import('@/views/manager/Dashboardnewtest.vue'), },
       ]
     },
     {
@@ -42,6 +40,7 @@ const router = createRouter({
     { path: '/login', component: () => import('@/views/Login.vue') },
     { path: '/register', component: () => import('@/views/Register.vue') },
     { path: '/404', component: () => import('@/views/404.vue') },
+    { path: '/bigscreen', meta: { name: '数据大屏' }, component: () => import('@/bigscreen/views/BigScreen.vue') },
     { path: '/:pathMatch(.*)', redirect: '/404' }
   ]
 })

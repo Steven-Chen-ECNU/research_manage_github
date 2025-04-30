@@ -5,7 +5,7 @@
                 style="width: 240px; margin-right: 10px" placeholder="请输入教师名称查询"></el-input>
             <el-input v-model="data.activityName" prefix-icon="Search" style="width: 240px; margin-right: 10px"
                 placeholder="请输入活动名称查询"></el-input>
-            <el-button type="info" plain @click="load">查询</el-button>
+            <el-button type="success" plain @click="load">查询</el-button>
             <el-button type="danger" round @click="delBatch">批量删除</el-button>
 
             <!-- <el-button type="warning" plain style="margin: 0 10px" @click="reset">重置</el-button> -->
