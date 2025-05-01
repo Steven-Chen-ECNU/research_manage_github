@@ -142,4 +142,10 @@ public class DashboardController {
         resultMap.put("yAxis", yList);
         return Result.success(resultMap);
     }
+
+    @GetMapping("/activeTeacherCount")
+    public Result activeTeacherCount() {
+        Integer count = projectService.countActiveTeacher();
+        return Result.success(count);
+    }
 }

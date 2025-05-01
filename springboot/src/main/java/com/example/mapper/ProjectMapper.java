@@ -18,4 +18,7 @@ public interface ProjectMapper {
 
     List<Project> selectAll(Project project);
 
+    // 统计提出过项目的教师人数
+    Integer countActiveTeacher();
+
 }

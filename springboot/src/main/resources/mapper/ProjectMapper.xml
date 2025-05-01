@@ -95,4 +95,8 @@
         where id = #{id}
     </update>
 
+    <select id="countActiveTeacher" resultType="java.lang.Integer">
+        SELECT COUNT(DISTINCT teacher_id) FROM project WHERE teacher_id IS NOT NULL
+    </select>
+
 </mapper>

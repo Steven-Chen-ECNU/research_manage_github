@@ -81,7 +81,24 @@
                     <el-input type="textarea" :rows="4" v-model="data.form.content" placeholder="请输入活动描述"></el-input>
                 </el-form-item>
                 <el-form-item prop="location" label="举办地点">
-                    <el-input v-model="data.form.location" placeholder="请输入举办地点"></el-input>
+                    <el-select v-model="data.form.location" placeholder="请选择举办地点" style="width: 100%">
+                        <el-option label="黄浦区" value="黄浦区"></el-option>
+                        <el-option label="徐汇区" value="徐汇区"></el-option>
+                        <el-option label="长宁区" value="长宁区"></el-option>
+                        <el-option label="静安区" value="静安区"></el-option>
+                        <el-option label="普陀区" value="普陀区"></el-option>
+                        <el-option label="虹口区" value="虹口区"></el-option>
+                        <el-option label="杨浦区" value="杨浦区"></el-option>
+                        <el-option label="浦东新区" value="浦东新区"></el-option>
+                        <el-option label="闵行区" value="闵行区"></el-option>
+                        <el-option label="宝山区" value="宝山区"></el-option>
+                        <el-option label="嘉定区" value="嘉定区"></el-option>
+                        <el-option label="金山区" value="金山区"></el-option>
+                        <el-option label="松江区" value="松江区"></el-option>
+                        <el-option label="青浦区" value="青浦区"></el-option>
+                        <el-option label="奉贤区" value="奉贤区"></el-option>
+                        <el-option label="崇明区" value="崇明区"></el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item prop="start" label="开始日期">
                     <el-date-picker value-format="YYYY-MM-DD" v-model="data.form.start" type="date" placeholder="请选择日期"

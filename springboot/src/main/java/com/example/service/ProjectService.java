@@ -76,4 +76,8 @@ public class ProjectService {
         projectMapper.updateById(project);
     }
 
+    public Integer countActiveTeacher() {
+        return projectMapper.countActiveTeacher();
+    }
+
 }
