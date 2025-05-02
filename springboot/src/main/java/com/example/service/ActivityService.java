@@ -7,16 +7,21 @@ import com.example.mapper.ActivityMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import jakarta.annotation.Resource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 业务层方法
  */
 @Service
 public class ActivityService {
+    private static final Logger logger = LoggerFactory.getLogger(ActivityService.class);
 
     @Resource
     private ActivityMapper activityMapper;
@@ -71,4 +76,23 @@ public class ActivityService {
         return PageInfo.of(list);
     }
 
+    /**
+     * 获取各区科研活力数据
+     * @return 各区活动数量统计
+     */
+    public List<Map<String, Object>> getResearchVitality() {
+        try {
+            logger.info("开始获取科研活力数据");
+            List<Map<String, Object>> result = activityMapper.getResearchVitality();
+            if (result == null) {
+                logger.warn("查询结果为空");
+                return new ArrayList<>();
+            }
+            logger.info("获取到 {} 条数据", result.size());
+            return result;
+        } catch (Exception e) {
+            logger.error("获取科研活力数据失败", e);
+            throw new CustomException("-1", "获取科研活力数据失败：" + e.getMessage());
+        }
+    }
 }

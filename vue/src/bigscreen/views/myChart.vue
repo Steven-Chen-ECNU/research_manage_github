@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
     <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
-    <div ref="chart" style="width: 100%; height: 400px"></div>
+    <div ref="chart" style="width: 100%; height: 100%; max-height: 100%; max-width: 100%;"></div>
   </div>
 </template>
   
@@ -61,4 +61,3 @@ const chartInit = () => {
   
 <style scoped>
 </style>
-  

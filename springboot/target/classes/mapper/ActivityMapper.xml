@@ -68,4 +68,19 @@
         where id = #{id}
     </update>
 
+    <select id="getResearchVitality" resultType="java.util.Map">
+        SELECT 
+            COALESCE(location, '未知') as section, 
+            COUNT(1) as count 
+        FROM 
+            `activity` 
+        WHERE 
+            location IS NOT NULL 
+            AND location != ''
+        GROUP BY 
+            location 
+        ORDER BY 
+            count DESC
+    </select>
+
 </mapper>

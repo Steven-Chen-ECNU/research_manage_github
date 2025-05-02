@@ -1,10 +1,13 @@
 package com.example.mapper;
 
 import com.example.entity.Activity;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
+import java.util.Map;
 
+@Mapper
 public interface ActivityMapper {
 
     int insert(Activity activity);
@@ -18,4 +21,5 @@ public interface ActivityMapper {
 
     List<Activity> selectAll(Activity activity);
 
+    List<Map<String, Object>> getResearchVitality();
 }

@@ -7,6 +7,7 @@
 <script setup>
 import { ref, defineProps, onMounted } from 'vue'
 import axios from 'axios'
+import request from '@/utils/request'
 
 const prop = defineProps({
   height: {
@@ -15,36 +16,25 @@ const prop = defineProps({
 })
 
 const config = ref({
-  data: [
-    {
-      name: '周口',
-      value: 55,
-    },
-    {
-      name: '南阳',
-      value: 120,
-    },
-    {
-      name: '西峡',
-      value: 71,
-    },
-    {
-      name: '驻马店',
-      value: 66,
-    },
-    {
-      name: '新乡',
-      value: 80,
-    },
-    {
-      name: '信阳',
-      value: 35,
-    },
-    {
-      name: '漯河',
-      value: 15,
-    },
-  ],
+  // data: [
+  //   {
+  //     name: '徐汇区',
+  //     value: 3
+  //   },
+  //   {
+  //     name: '宝山区',
+  //     value: 1
+  //   },
+  //   {
+  //     name: '嘉定区',
+  //     value: 1
+  //   },
+  //   {
+  //     name: '奉贤区',
+  //     value: 1
+  //   }
+  // ],
+  data: [],
   img: [
     '/src/bigscreen/assets/img/1st.png',
     '/src/bigscreen/assets/img/2st.png',
@@ -56,23 +46,46 @@ const config = ref({
   ],
 })
 
-// // 获取各区科研活力数据
-// const getResearchVitality = async () => {
-//   try {
-//     const response = await axios.get('/dashboard/research-vitality')
-//     const data = response.data
-//     // 按活动数量排序，取前7名
-//     const sortedData = data.sort((a, b) => b.count - a.count).slice(0, 7)
-//     config.value.data = sortedData.map(item => ({
-//       name: item.section,
-//       value: item.count
-//     }))
-//   } catch (error) {
-//     console.error('获取科研活力数据失败:', error)
-//   }
-// }
+// 获取各区科研活力数据
+const getResearchVitality = async () => {
+  try {
+    const response = await request.get('/dashboard/researchVitality')
+    console.log('原始数据:', response.data)
 
-// onMounted(() => {
-//   getResearchVitality()
-// })
+    // if (response.data && response.data.code === 200) {
+    //   const rawData = response.data.data
+    //   console.log('后端返回的数据:', rawData)
+
+    //   // 保持现有数据作为默认值
+    //   const currentData = config.value.data
+
+    //   if (Array.isArray(rawData) && rawData.length > 0) {
+    //     // 按活动数量排序，取前7名
+    //     const sortedData = rawData.sort((a, b) => b.count - a.count).slice(0, 7)
+    //     config.value.data = sortedData.map(item => ({
+    //       name: item.section,
+    //       value: parseInt(item.count)
+    //     }))
+    //   }
+    // }
+
+    const rawData = response.data
+
+    if (Array.isArray(rawData) && rawData.length > 0) {
+      // 按活动数量排序，取前7名
+      const sortedData = rawData.sort((a, b) => b.count - a.count).slice(0, 7)
+      config.value.data = sortedData.map(item => ({
+        name: item.section,
+        value: parseInt(item.count)
+      }))
+    }
+
+  } catch (error) {
+    console.error('获取科研活力数据失败:', error)
+  }
+}
+
+onMounted(() => {
+  getResearchVitality()
+})
 </script>

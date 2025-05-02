@@ -35,8 +35,8 @@ public class JWTInterceptor implements HandlerInterceptor {
         // 1. 从http请求标头里面拿到token
         String token = request.getHeader(Constants.TOKEN);
         if (ObjectUtil.isNull(token)) {
-            // 如果没拿到，那么再从请求参数里拿一次
-            request.getParameter(Constants.TOKEN);
+            // 如果没拿到，那么再从请求参数里拿一次(加了一个token=)
+            token = request.getParameter(Constants.TOKEN);
         }
         // 2. 开始执行认证
         if (ObjectUtil.isNull(token)) {

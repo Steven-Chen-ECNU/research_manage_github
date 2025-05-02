@@ -13,6 +13,8 @@ import com.example.service.ApplyService;
 import com.example.service.ProjectService;
 import com.example.service.TeacherService;
 import jakarta.annotation.Resource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,6 +28,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/dashboard")
 public class DashboardController {
+    private static final Logger logger = LoggerFactory.getLogger(DashboardController.class);
 
     @Resource
     private ProjectService projectService;
@@ -147,5 +150,18 @@ public class DashboardController {
     public Result activeTeacherCount() {
         Integer count = projectService.countActiveTeacher();
         return Result.success(count);
+    }
+
+    @GetMapping("/researchVitality")
+    public Result researchVitality() {
+        try {
+            logger.warn("开始获取科研活力数据");
+            List<Map<String, Object>> result = activityService.getResearchVitality();
+            logger.info("获取到的数据: {}", result);
+            return Result.success(result);
+        } catch (Exception e) {
+            logger.error("获取科研活力数据失败", e);
+            return Result.error("-1", "获取科研活力数据失败：" + e.getMessage());
+        }
     }
 }

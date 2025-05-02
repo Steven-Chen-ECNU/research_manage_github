@@ -22,6 +22,14 @@ export default defineConfig({
       resolvers: [ElementPlusResolver({ importStyle: 'sass' })],
     }),
   ],
+  server: {
+    proxy: {
+      '/dashboard': {
+        target: 'http://localhost:9090',
+        changeOrigin: true
+      }
+    }
+  },
   // 预加载项目必需的组件
   optimizeDeps: {
     include: [
