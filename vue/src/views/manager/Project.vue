@@ -46,7 +46,8 @@
               :icon="Edit" @click="handleEdit(scope.row)" title="编辑内容"></el-button>
             <el-button v-if="scope.row.status === '待审核' && data.user.role === 'ADMIN'" type="primary" circle
               :icon="View" @click="handleCheck(scope.row)" title="查看详情"></el-button>
-            <el-button type="success" circle :icon="DataAnalysis" @click="handleAI(scope.row)" title="AI智能分析"></el-button>
+            <el-button type="success" circle :icon="DataAnalysis" @click="handleAI(scope.row)"
+              title="AI智能分析"></el-button>
             <el-button type="danger" circle :icon="Delete" @click="del(scope.row.id)" title="删除记录"></el-button>
           </template>
         </el-table-column>
@@ -143,10 +144,6 @@ import crypto from 'crypto';
 
 const baseUrl = import.meta.env.VITE_BASE_URL;
 const formRef = ref();
-
-// 假设在.env 文件中定义了这两个环境变量
-const TENCENT_SECRET_ID = import.meta.env.VITE_TENCENT_SECRET_ID;
-const TENCENT_SECRET_KEY = import.meta.env.VITE_TENCENT_SECRET_KEY;
 
 // 将 API 相关的配置提取到一个对象中
 const apiConfig = {
@@ -255,7 +252,7 @@ const update = () => {
 const save = () => {
   formRef.value.validate(valid => {
     if (valid) {
-      data.form.id? update() : add();
+      data.form.id ? update() : add();
     }
   });
 };
@@ -305,7 +302,7 @@ const handleAI = (row) => {
   data.aiVisible = true;
   data.aiLoading = true;
   data.aiResult = '';
-  
+
   request.post('/project/analyze', {
     fileUrl: row.file
   }).then(res => {
@@ -326,7 +323,7 @@ const downloadAIResult = () => {
     ElMessage.warning('没有可下载的分析结果');
     return;
   }
-  
+
   const blob = new Blob([data.aiResult], { type: 'text/plain;charset=utf-8' });
   const url = window.URL.createObjectURL(blob);
   const link = document.createElement('a');
@@ -339,4 +336,4 @@ const downloadAIResult = () => {
 };
 
 load();
-</script> 
+</script>
