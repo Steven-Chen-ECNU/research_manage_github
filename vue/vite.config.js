@@ -27,6 +27,12 @@ export default defineConfig({
       '/dashboard': {
         target: 'http://localhost:9090',
         changeOrigin: true
+      },
+      // 添加对腾讯混元 API 的代理配置
+      '/api': {
+        target: 'https://hunyuan.tencentcloudapi.com',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, '')
       }
     }
   },
@@ -108,4 +114,4 @@ export default defineConfig({
       }
     }
   },
-})
+})    

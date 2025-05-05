@@ -25,6 +25,14 @@ public class FileController {
     @Value("${fileBaseUrl:}")
     private String fileBaseUrl;
 
+    public FileController() {
+        // 确保文件目录存在
+        if (!FileUtil.isDirectory(filePath)) {
+            FileUtil.mkdir(filePath);
+            log.info("Created files directory at: {}", filePath);
+        }
+    }
+
     /**
      * 文件上传
      */
@@ -39,8 +47,10 @@ public class FileController {
             String realFilePath = filePath + fileName;
             // 文件存储形式：时间戳-文件名
             FileUtil.writeBytes(file.getBytes(), realFilePath);
+            log.info("File uploaded successfully: {}", realFilePath);
         } catch (Exception e) {
             log.error(fileName + "--文件上传失败", e);
+            return Result.error("文件上传失败");
         }
         String url = fileBaseUrl + "/files/download/" + fileName;
         return Result.success(url);
@@ -54,16 +64,24 @@ public class FileController {
         OutputStream os;
         try {
             if (StrUtil.isNotEmpty(fileName)) {
+                String filePath = FileController.filePath + fileName;
+                if (!FileUtil.exist(filePath)) {
+                    log.error("File not found: {}", filePath);
+                    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                    return;
+                }
                 response.addHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName, StandardCharsets.UTF_8));
                 response.setContentType("application/octet-stream");
-                byte[] bytes = FileUtil.readBytes(filePath + fileName);
+                byte[] bytes = FileUtil.readBytes(filePath);
                 os = response.getOutputStream();
                 os.write(bytes);
                 os.flush();
                 os.close();
+                log.info("File downloaded successfully: {}", filePath);
             }
         } catch (Exception e) {
-            log.warn("文件下载失败：" + fileName);
+            log.error("文件下载失败：" + fileName, e);
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 }

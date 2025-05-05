@@ -15,6 +15,7 @@
     "echarts": "^5.6.0",
     "echarts-gl": "^2.0.9",
     "element-plus": "^2.7.6",
+    "tencentcloud-sdk-nodejs": "^4.1.30",
     "vue": "^3.4.29",
     "vue-router": "^4.3.3"
   },

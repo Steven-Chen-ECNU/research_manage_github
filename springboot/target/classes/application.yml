@@ -25,3 +25,9 @@ logging:
     org.springframework.security: DEBUG
 
 fileBaseUrl: http://localhost:${server.port}
+
+# 腾讯云配置
+tencent:
+  secretId: ${TENCENT_SECRET_ID}
+  secretKey: ${TENCENT_SECRET_KEY}
+  region: ap-guangzhou

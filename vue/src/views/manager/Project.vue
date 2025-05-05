@@ -40,12 +40,13 @@
         </el-table-column>
         <el-table-column prop="reason" label="审核原因" show-overflow-tooltip />
         <el-table-column prop="time" label="审核时间" show-overflow-tooltip />
-        <el-table-column label="操作" width="100" fixed="right">
+        <el-table-column label="操作" width="144" fixed="right">
           <template v-slot="scope">
             <el-button v-if="scope.row.status === '待审核' && data.user.role === 'TEACHER'" type="primary" circle
               :icon="Edit" @click="handleEdit(scope.row)" title="编辑内容"></el-button>
             <el-button v-if="scope.row.status === '待审核' && data.user.role === 'ADMIN'" type="primary" circle
               :icon="View" @click="handleCheck(scope.row)" title="查看详情"></el-button>
+            <el-button type="success" circle :icon="DataAnalysis" @click="handleAI(scope.row)" title="AI智能分析"></el-button>
             <el-button type="danger" circle :icon="Delete" @click="del(scope.row.id)" title="删除记录"></el-button>
           </template>
         </el-table-column>
@@ -118,21 +119,53 @@
         </span>
       </template>
     </el-dialog>
+    <el-dialog title="AI智能分析结果" v-model="data.aiVisible" width="60%" destroy-on-close>
+      <div v-loading="data.aiLoading">
+        <div v-if="data.aiResult" style="white-space: pre-wrap;">{{ data.aiResult }}</div>
+        <div v-else>正在分析中，请稍候...</div>
+      </div>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="data.aiVisible = false">关 闭</el-button>
+          <el-button type="primary" @click="downloadAIResult">下载结果</el-button>
+        </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
 <script setup>
-
 import { reactive, ref } from "vue";
 import request from "@/utils/request.js";
 import { ElMessage, ElMessageBox } from "element-plus";
-import { Delete, Edit, View } from "@element-plus/icons-vue";
-const baseUrl = import.meta.env.VITE_BASE_URL
-const formRef = ref()
+import { Delete, Edit, View, DataAnalysis } from "@element-plus/icons-vue";
+import crypto from 'crypto';
+
+const baseUrl = import.meta.env.VITE_BASE_URL;
+const formRef = ref();
+
+// 假设在.env 文件中定义了这两个环境变量
+const TENCENT_SECRET_ID = import.meta.env.VITE_TENCENT_SECRET_ID;
+const TENCENT_SECRET_KEY = import.meta.env.VITE_TENCENT_SECRET_KEY;
+
+// 将 API 相关的配置提取到一个对象中
+const apiConfig = {
+  url: 'https://hunyuan.tencentcloudapi.com',
+  action: 'Chat',
+  version: '2023-09-01',
+  model: 'hunyuan-chat',
+  temperature: 0.7,
+  topP: 0.8,
+  maxTokens: 1000
+};
+
 const data = reactive({
   user: JSON.parse(localStorage.getItem('xm-user') || '{}'),
   formVisible: false,
   checkVisible: false,
+  aiVisible: false,
+  aiLoading: false,
+  aiResult: '',
   form: {},
   tableData: [],
   pageNum: 1,
@@ -140,7 +173,7 @@ const data = reactive({
   total: 0,
   code: null,
   name: null,
-})
+});
 
 const rules = reactive({
   file: [
@@ -164,7 +197,7 @@ const rules = reactive({
   end: [
     { required: true, message: '请选择结束日期', trigger: 'blur' },
   ],
-})
+});
 
 const load = () => {
   request.get('/project/selectPage', {
@@ -176,92 +209,134 @@ const load = () => {
     }
   }).then(res => {
     if (res.code === '200') {
-      data.tableData = res.data?.list || []
-      data.total = res.data?.total
+      data.tableData = res.data?.list || [];
+      data.total = res.data?.total;
     }
-  })
-}
+  });
+};
+
 const handleAdd = () => {
-  data.form = {}
-  data.formVisible = true
-}
+  data.form = {};
+  data.formVisible = true;
+};
+
 const handleEdit = (row) => {
-  data.form = JSON.parse(JSON.stringify(row))
-  data.formVisible = true
-}
+  data.form = JSON.parse(JSON.stringify(row));
+  data.formVisible = true;
+};
+
 const handleCheck = (row) => {
-  data.form = JSON.parse(JSON.stringify(row))
-  data.checkVisible = true
-}
+  data.form = JSON.parse(JSON.stringify(row));
+  data.checkVisible = true;
+};
+
 const add = () => {
   request.post('/project/add', data.form).then(res => {
     if (res.code === '200') {
-      ElMessage.success('操作成功')
-      data.formVisible = false
-      load()
+      ElMessage.success('操作成功');
+      data.formVisible = false;
+      load();
     } else {
-      ElMessage.error(res.msg)
+      ElMessage.error(res.msg);
     }
-  })
-}
+  });
+};
 
 const update = () => {
   request.put('/project/update', data.form).then(res => {
     if (res.code === '200') {
-      ElMessage.success('操作成功')
-      data.formVisible = false
-      load()
+      ElMessage.success('操作成功');
+      data.formVisible = false;
+      load();
     }
-  })
-}
+  });
+};
 
 const save = () => {
   formRef.value.validate(valid => {
     if (valid) {
-      data.form.id ? update() : add()
+      data.form.id? update() : add();
     }
-  })
-}
+  });
+};
 
 const submit = () => {
   request.put('/project/check', data.form).then(res => {
     if (res.code === '200') {
-      ElMessage.success('操作成功')
-      data.checkVisible = false
-      load()
+      ElMessage.success('操作成功');
+      data.checkVisible = false;
+      load();
     } else {
-      ElMessage.error(res.msg)
+      ElMessage.error(res.msg);
     }
-  })
-}
+  });
+};
 
 const del = (id) => {
   ElMessageBox.confirm('删除后数据无法恢复，您确定删除吗？', '删除确认', { type: 'warning' }).then(res => {
     request.delete('/project/delete/' + id).then(res => {
       if (res.code === '200') {
-        ElMessage.success("删除成功")
-        load()
+        ElMessage.success("删除成功");
+        load();
       } else {
-        ElMessage.error(res.msg)
+        ElMessage.error(res.msg);
       }
-    })
+    });
   }).catch(err => {
-    console.error(err)
-  })
-}
+    console.error(err);
+  });
+};
 
 const reset = () => {
-  data.code = null
-  data.name = null
-  load()
-}
+  data.code = null;
+  data.name = null;
+  load();
+};
 
 const handleFileUpload = (res) => {
-  data.form.file = res.data
-}
-const down = (url) => {
-  window.open(url)
-}
+  data.form.file = res.data;
+};
 
-load()
-</script>
+const down = (url) => {
+  window.open(url);
+};
+
+const handleAI = (row) => {
+  data.aiVisible = true;
+  data.aiLoading = true;
+  data.aiResult = '';
+  
+  request.post('/project/analyze', {
+    fileUrl: row.file
+  }).then(res => {
+    if (res.code === '200') {
+      data.aiResult = res.data;
+    } else {
+      ElMessage.error(res.msg || '分析失败');
+    }
+  }).catch(err => {
+    ElMessage.error('分析失败：' + err.message);
+  }).finally(() => {
+    data.aiLoading = false;
+  });
+};
+
+const downloadAIResult = () => {
+  if (!data.aiResult) {
+    ElMessage.warning('没有可下载的分析结果');
+    return;
+  }
+  
+  const blob = new Blob([data.aiResult], { type: 'text/plain;charset=utf-8' });
+  const url = window.URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'AI分析结果.txt';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  window.URL.revokeObjectURL(url);
+};
+
+load();
+</script> 
