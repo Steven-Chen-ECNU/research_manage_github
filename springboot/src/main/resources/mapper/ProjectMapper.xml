@@ -99,4 +99,30 @@
         SELECT COUNT(DISTINCT teacher_id) FROM project WHERE teacher_id IS NOT NULL
     </select>
 
+    <!-- 计算在研项目的教师数 -->
+    <select id="countOngoingProjectTeachers" resultType="java.lang.Integer">
+        SELECT COUNT(DISTINCT teacher_id) 
+        FROM project 
+        WHERE status = '审核通过' 
+        AND start &lt;= #{currentDate} 
+        AND end &gt;= #{currentDate}
+    </select>
+
+    <!-- 计算高预算项目(>50万)的教师数 -->
+    <select id="countHighBudgetProjectTeachers" resultType="java.lang.Integer">
+        SELECT COUNT(DISTINCT teacher_id) 
+        FROM project 
+        WHERE status = '审核通过' 
+        AND CAST(price AS DECIMAL) > 50
+    </select>
+
+    <select id="calculateResearchStrength" resultType="java.lang.Double">
+        SELECT 
+            (COALESCE(SUM(CASE WHEN level = '一级' THEN 1 ELSE 0 END), 0) * 100.0 / COUNT(*)) +
+            (COALESCE(SUM(CASE WHEN level = '二级' THEN 1 ELSE 0 END), 0) * 50.0 / COUNT(*)) +
+            (COALESCE(SUM(CASE WHEN level = '三级' THEN 1 ELSE 0 END), 0) * 25.0 / COUNT(*))
+        FROM project 
+        WHERE status = '审核通过'
+    </select>
+
 </mapper>

@@ -38,7 +38,7 @@
             </el-icon>
             <span>系统首页</span>
           </el-menu-item>
-          <el-menu-item index="/manager/dashboard" v-if="data.user.role === 'ADMIN'">
+          <!-- <el-menu-item index="/manager/dashboard" v-if="data.user.role === 'ADMIN'">
             <el-icon>
               <Odometer />
             </el-icon>
@@ -46,11 +46,10 @@
           </el-menu-item>
           <el-menu-item index="/manager/dashboardnewtest" v-if="data.user.role === 'ADMIN'">
             <el-icon>
-              <!-- <Odometer /> -->
-              <TrendCharts />
-            </el-icon>
-            <span>数据统计新测试</span>
-          </el-menu-item>
+          <TrendCharts />
+          </el-icon>
+          <span>数据统计新测试</span>
+          </el-menu-item> -->
           <el-menu-item index="/bigscreen">
             <el-icon>
               <DataLine />

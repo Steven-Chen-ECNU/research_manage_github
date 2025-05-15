@@ -21,4 +21,13 @@ public interface ProjectMapper {
     // 统计提出过项目的教师人数
     Integer countActiveTeacher();
 
+    // 计算在研项目的教师数
+    Integer countOngoingProjectTeachers(String currentDate);
+
+    // 计算高预算项目的教师数
+    Integer countHighBudgetProjectTeachers();
+
+    // 计算科研实力指标
+    Double calculateResearchStrength();
+
 }

@@ -148,8 +148,14 @@ public class DashboardController {
 
     @GetMapping("/activeTeacherCount")
     public Result activeTeacherCount() {
-        Integer count = projectService.countActiveTeacher();
-        return Result.success(count);
+        Double activity = projectService.calculateResearchActivity();
+        return Result.success(activity);
+    }
+
+    @GetMapping("/researchStrength")
+    public Result researchStrength() {
+        Double strength = projectService.calculateResearchStrength();
+        return Result.success(strength);
     }
 
     @GetMapping("/researchVitality")

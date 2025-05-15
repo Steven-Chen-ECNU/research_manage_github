@@ -37,7 +37,6 @@ import { ElMessage } from "element-plus";
 import router from "@/router/index.js";
 
 const data = reactive({
-  dialogVisible: true,
   form: {},
   rules: {
     username: [

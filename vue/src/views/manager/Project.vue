@@ -22,7 +22,11 @@
         <el-table-column prop="source" label="项目来源" />
         <el-table-column prop="level" label="项目等级" />
         <el-table-column prop="subject" label="学科" />
-        <el-table-column prop="price" label="项目预算" />
+        <el-table-column prop="price" label="项目预算（万元）">
+          <template #default="scope">
+            {{ scope.row.price }} 
+          </template>
+        </el-table-column>
         <el-table-column prop="start" label="开始时间" />
         <el-table-column prop="end" label="结束时间" />
         <el-table-column prop="file" label="申请材料" width="120">
@@ -90,7 +94,9 @@
             placeholder="请选择日期"></el-date-picker>
         </el-form-item>
         <el-form-item prop="price" label="项目预算">
-          <el-input-number v-model="data.form.price" :min="1" :max="1000000" label="label"></el-input-number>
+          <el-input-number v-model="data.form.price" :min="1" :max="1000000" label="label">
+            <template #suffix>万元</template>
+          </el-input-number>
         </el-form-item>
       </el-form>
       <template #footer>

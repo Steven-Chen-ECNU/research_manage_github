@@ -4,8 +4,12 @@ import cn.hutool.core.date.DateUtil;
 import com.example.common.enums.RoleEnum;
 import com.example.entity.Account;
 import com.example.entity.Project;
+import com.example.entity.Teacher;
+import com.example.entity.Achievement;
 import com.example.exception.CustomException;
 import com.example.mapper.ProjectMapper;
+import com.example.mapper.TeacherMapper;
+import com.example.mapper.AchievementMapper;
 import com.example.utils.TokenUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -24,6 +28,12 @@ public class ProjectService {
 
     @Resource
     private ProjectMapper projectMapper;
+    
+    @Resource
+    private TeacherMapper teacherMapper;
+    
+    @Resource
+    private AchievementMapper achievementMapper;
 
     public void add(Project project) throws ParseException {
         project.setCode(DateUtil.parse(DateUtil.now()).toString("yyyyMMddHHmmss"));
@@ -78,6 +88,37 @@ public class ProjectService {
 
     public Integer countActiveTeacher() {
         return projectMapper.countActiveTeacher();
+    }
+
+    public Double calculateResearchActivity() {
+        // 获取当前日期
+        String currentDate = DateUtil.today();
+        
+        // 获取总教师数
+        List<Teacher> teachers = teacherMapper.selectAll(new Teacher());
+        double totalTeachers = teachers.size();
+        if (totalTeachers == 0) {
+            return 0.0;
+        }
+
+        // 计算在研项目系数 (50%)
+        double ongoingProjectCoef = projectMapper.countOngoingProjectTeachers(currentDate) / totalTeachers * 0.5;
+
+        // 计算成果转化系数 (30%)
+        Achievement achievement = new Achievement();
+        achievement.setStatus("审核通过");
+        List<Achievement> achievements = achievementMapper.selectAll(achievement);
+        double achievementCoef = achievements.stream().map(Achievement::getTeacherId).distinct().count() / totalTeachers * 0.3;
+
+        // 计算项目预算系数 (20%)
+        double budgetCoef = projectMapper.countHighBudgetProjectTeachers() / totalTeachers * 0.2;
+
+        // 计算总活跃度（去掉最后的*100，因为已经是百分比了）
+        return ongoingProjectCoef + achievementCoef + budgetCoef;
+    }
+
+    public Double calculateResearchStrength() {
+        return projectMapper.calculateResearchStrength();
     }
 
 }

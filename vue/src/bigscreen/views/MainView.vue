@@ -39,24 +39,27 @@ import myChart from './myChart.vue'
 import request from '@/utils/request'
 
 const config1 = reactive({
-value: 0,
+  value: 0,
 })
 
 const config3 = reactive({
-data: [0, 100],
-shape: 'roundRect',
+  data: [0,100],
+  shape: 'roundRect',
+  colors: ['#00eaff', '#3DE7C9', '#00eaff'],
+  waveNum: 5,
+  waveHeight: 30,
+  waveOpacity: 0.4,
+  formatter: '{value}%'
 })
 
 onMounted(async () => {
-// 获取教师总数
-const baseRes = await request.get('/dashboard/base')
-const totalTeacherCount = baseRes.data.teacher
-// 获取活跃教师数
-const activeRes = await request.get('/dashboard/activeTeacherCount')
-const activeTeacherCount = activeRes.data
-// 计算百分比
-const percent = totalTeacherCount === 0 ? 0 : Math.round((activeTeacherCount / totalTeacherCount) * 100)
-config1.value = percent
-config3.data = [percent, 100 - percent]
+  // 获取科研活跃度数据（用于左上角和右下角）
+  const activeRes = await request.get('/dashboard/activeTeacherCount')
+  const activityValue = activeRes.data * 100  // 转换为百分比
+  const roundedValue = Math.round(activityValue)
+  
+  // 两个图表使用相同的值
+  config1.value = roundedValue
+  config3.data = [roundedValue,roundedValue/2]
 })
 </script>
